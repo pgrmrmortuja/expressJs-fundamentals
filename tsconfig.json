@@ -49,8 +49,13 @@
   //commands:
   //npm --init y
   //npm install express
+  // npm i --save-dev @types/express
   //npm i -D typescript
+  //npm i tsx
   //npx tsc --init
   //npm install -D @types/node
   //npm install dotenv
+
+  //Script:
+  //"dev": "tsx watch ./src/server.ts",
 }
