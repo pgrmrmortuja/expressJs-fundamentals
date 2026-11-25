@@ -1,5 +1,5 @@
-import express, {type Application, type Request, type Response } from "express";
-import {Pool} from "pg"
+import express, { type Application, type Request, type Response } from "express";
+import { Pool } from "pg"
 
 const app: Application = express();
 const port = 5000;
@@ -7,13 +7,37 @@ const port = 5000;
 //Middleware
 app.use(express.json());
 app.use(express.text());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
+//! ToDo
 const pool = new Pool({
-    connectionString: "postgresql://"
-})
+    connectionString: "postgresql://neondb_owner:npg_VIZc93YEXdvG@ep-falling-pine-bi4xt7n0-pooler.c-5.ap-southeast-1.aws.neon.tech/neondb?sslmode=false&channel_binding=require"
+});
 
-// console.log(pool); //express and postgress serverless platfrom neon connect with pg
+// console.log(pool);
+
+const initDB = async () => {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS users(
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                email VARCHAR(255) NOT NULL,
+                age INT,
+                password VARCHAR(255) NOT NULL,
+                is_Active BOOLEAN DEFAULT true,
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW()
+            );
+            `)
+
+        console.log("Database Connected Successfully!!")
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+initDB();
 
 // app.get("/", (req, res) => {
 //     res.send("Express Server Created.");
@@ -27,15 +51,15 @@ app.get("/", (req: Request, res: Response) => {
     })
 })
 
-app.post("/", async (req: Request, res: Response) => {
+app.post("/api/v1/users", async (req: Request, res: Response) => {
     // console.log(req.body);
 
-    const {name, age, password} = req.body;
+    const { name, email, age, password } = req.body;
 
     res.status(201).json({
         success: true,
-        message: "This is test post api.",
-        data: {name, age}
+        message: "User created successfully!",
+        data: { name, email, age }
     });
 })
 
