@@ -1,17 +1,16 @@
 import express, { type Application, type Request, type Response } from "express";
 import { Pool } from "pg"
+import config from "./config";
 
 const app: Application = express();
-const port = 5000;
 
 //Middleware
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-//! ToDo
 const pool = new Pool({
-    connectionString: "postgresql://"
+    connectionString: config.connection_string
 });
 
 // console.log(pool);
@@ -207,6 +206,6 @@ app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
     }
 })
 
-app.listen(port, () => {
-    console.log(`The server is running on the port ${port}`);
+app.listen(config.port, () => {
+    console.log(`The server is running on the port ${config.port}`);
 })
