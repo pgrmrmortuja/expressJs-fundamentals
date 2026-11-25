@@ -11,8 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //! ToDo
 const pool = new Pool({
-    connectionString: "postgresql://neondb_owner:npg_VIZc93YEXdvG@ep-falling-pine-bi4xt7n0-pooler.c-5.ap-southeast-1.aws.neon.tech/neondb?sslmode=false&channel_binding=require"
-});
+    connectionString: "postgresql://"
+}); //sending creating user response to client
 
 // console.log(pool);
 
