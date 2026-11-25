@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 //! ToDo
 const pool = new Pool({
     connectionString: "postgresql://"
-}); //sending creating user response to client
+});
 
 // console.log(pool);
 
@@ -22,7 +22,7 @@ const initDB = async () => {
             CREATE TABLE IF NOT EXISTS users(
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255),
-                email VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
                 age INT,
                 password VARCHAR(255) NOT NULL,
                 is_Active BOOLEAN DEFAULT true,
@@ -52,15 +52,29 @@ app.get("/", (req: Request, res: Response) => {
 })
 
 app.post("/api/v1/users", async (req: Request, res: Response) => {
-    // console.log(req.body);
+    try {
+        // console.log(req.body);
 
-    const { name, email, age, password } = req.body;
+        const { name, email, age, password } = req.body;
 
-    res.status(201).json({
-        success: true,
-        message: "User created successfully!",
-        data: { name, email, age }
-    });
+        const result = await pool.query(`
+            INSERT INTO users (name, email, age, password) VALUES ($1, $2, $3, $4) RETURNING *
+        ` , [name, email, age, password]);
+
+        console.log(result.rows);
+
+        res.status(201).json({
+            success: true,
+            message: "User created successfully!",
+            data: result.rows
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error?.message,
+            error: error
+        });
+    }
 })
 
 app.listen(port, () => {
