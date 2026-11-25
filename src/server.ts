@@ -51,6 +51,28 @@ app.get("/", (req: Request, res: Response) => {
     })
 })
 
+//Get All Users
+app.get("/api/v1/users", async (req: Request, res: Response) => {
+    try {
+        const result = await pool.query(`
+            SELECT * FROM users
+            `);    
+
+        res.status(200).json({
+            success: true,
+            message: "Users retrived successfully.",
+            data: result.rows
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error?.message,
+            error: error
+        })
+    }
+})
+
+//Create Users
 app.post("/api/v1/users", async (req: Request, res: Response) => {
     try {
         // console.log(req.body);
