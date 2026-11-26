@@ -1,5 +1,7 @@
 import express, { type Application, type Request, type Response } from "express";
-import { pool } from ".";
+import { pool } from "./db";
+import { userRoute } from "./modules/users/user.route";
+
 
 const app: Application = express();
 
@@ -48,32 +50,7 @@ app.get("/", (req: Request, res: Response) => {
 })
 
 //Get All Users
-app.get("/api/v1/users", async (req: Request, res: Response) => {
-    try {
-        const result = await pool.query(`
-            SELECT * FROM users
-            `);
-
-        if (result.rowCount === 0) {
-            res.status(404).json({
-                success: false,
-                message: "User not found!",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Users retrived successfully.",
-            data: result.rows
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error?.message,
-            error: error
-        })
-    }
-})
+app.use("/api/v1/users", userRoute);
 
 //Get single user
 app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
@@ -106,31 +83,7 @@ app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
 })
 
 //Create Users
-app.post("/api/v1/users", async (req: Request, res: Response) => {
-    try {
-        // console.log(req.body);
-
-        const { name, email, age, password } = req.body;
-
-        const result = await pool.query(`
-            INSERT INTO users (name, email, age, password) VALUES ($1, $2, $3, $4) RETURNING *
-        ` , [name, email, age, password]);
-
-        console.log(result.rows);
-
-        res.status(201).json({
-            success: true,
-            message: "User created successfully!",
-            data: result.rows
-        });
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error?.message,
-            error: error
-        });
-    }
-})
+app.use("/api/v1/users", userRoute)
 
 //Update User
 app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
