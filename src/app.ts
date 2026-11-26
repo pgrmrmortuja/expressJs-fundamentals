@@ -10,44 +10,6 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-// const pool = new Pool({
-//     connectionString: config.connection_string
-// });
-
-// const initDB = async () => {
-//     try {
-//         await pool.query(`
-//             CREATE TABLE IF NOT EXISTS users(
-//                 id SERIAL PRIMARY KEY,
-//                 name VARCHAR(255),
-//                 email VARCHAR(255) UNIQUE NOT NULL,
-//                 age INT,
-//                 password VARCHAR(255) NOT NULL,
-//                 is_Active BOOLEAN DEFAULT true,
-//                 created_at TIMESTAMP DEFAULT NOW(),
-//                 updated_at TIMESTAMP DEFAULT NOW()
-//             );
-//             `)
-
-//         console.log("Database Connected Successfully!!")
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// initDB();
-
-// app.get("/", (req, res) => {
-//     res.send("Express Server Created.");
-// })
-
-app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({
-        success: true,
-        message: "This is Express server root route.",
-        author: "pgrmrmortuja"
-    })
-})
 
 //Get All Users
 app.use("/api/v1/users", userRoute);
@@ -64,8 +26,13 @@ app.use("/api/v1/users/:id", userRoute)
 //Delete User
 app.use("/api/v1/users/:id", userRoute);
 
-// app.listen(config.port, () => {
-//     console.log(`The server is running on the port ${config.port}`);
-// })
+//Root route
+app.get("/", async (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        message: "This is root route.",
+        author: "pgrmrmortuja"
+    })
+})
 
 export default app
