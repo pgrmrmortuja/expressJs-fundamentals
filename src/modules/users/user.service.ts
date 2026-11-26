@@ -31,11 +31,29 @@ const createUserIntoDB = async (payload: IUser) => {
 }
 
 //update user
+const updateUserFromDB = async (payload: IUser, id: string) => {
+    const { name, age, password, is_Active } = payload;
+
+    const result = await pool.query(`
+            UPDATE users
+            SET
+            name = COALESCE($1, name),
+            age = COALESCE($2, age),
+            password = COALESCE($3, password),
+            is_Active = COALESCE($4, is_Active),
+            updated_at = NOW()
+
+            WHERE id=$5 RETURNING *
+            `, [name ?? null, age ?? null, password ?? null, is_Active ?? null, id])
+
+            return result;
+}
 
 //delete user
 
 export const userService = {
     getAllUsersFromDB,
     getSingleUserFromDB,
-    createUserIntoDB
+    createUserIntoDB,
+    updateUserFromDB
 }

@@ -14,6 +14,7 @@ route.get("/:id", userController.getSingleUser)
 route.post("/", userController.createUser);
 
 //update user
+route.put("/:id", userController.updateUser);
 
 //delete user
 
