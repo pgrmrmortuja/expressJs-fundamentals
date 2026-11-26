@@ -62,35 +62,7 @@ app.use("/api/v1/users", userRoute)
 app.use("/api/v1/users/:id", userRoute)
 
 //Delete User
-app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
-
-    try {
-
-        const { id } = req.params;
-
-        const result = await pool.query(`
-            DELETE FROM users WHERE id=$1
-            `, [id])
-
-        if (result.rowCount === 0) {
-            res.status(404).json({
-                success: false,
-                message: "User not found!",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "User deleted successfully!",
-        });
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error?.message,
-            error: error
-        });
-    }
-})
+app.use("/api/v1/users/:id", userRoute);
 
 // app.listen(config.port, () => {
 //     console.log(`The server is running on the port ${config.port}`);
