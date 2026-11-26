@@ -53,34 +53,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1/users", userRoute);
 
 //Get single user
-app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        const result = await pool.query(`
-            SELECT * FROM users WHERE id=$1 
-            `, [id]);
-
-        if (result.rowCount === 0) {
-            res.status(404).json({
-                success: false,
-                message: "User not found!",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "User retrived successfully.",
-            data: result.rows[0]
-        })
-
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error?.message,
-            error: error
-        })
-    }
-})
+app.use("api/v1/users/:id", userRoute)
 
 //Create Users
 app.use("/api/v1/users", userRoute)
