@@ -55,6 +55,8 @@
   //npx tsc --init
   //npm install -D @types/node
   //npm install dotenv
+  //npm install pg
+  //npm i -D @types/pg
 
   //Script:
   //"dev": "tsx watch ./src/server.ts",
