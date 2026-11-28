@@ -10,7 +10,6 @@ import { profileService } from "./profile.service";
 //create profile
 const createProfile = async (req: Request, res: Response) => {
     try {
-        // console.log(req.body);
 
         const result = await profileService.createProfileIntoDB(req.body);
 

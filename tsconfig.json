@@ -57,6 +57,7 @@
   //npm install dotenv
   //npm install pg
   //npm i -D @types/pg
+  //npm i bcryptjs
 
   //Script:
   //"dev": "tsx watch ./src/server.ts",
